@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Create Account | StockWise{% endblock %}
+{% block content %}
+<div style="max-width:520px;margin:40px auto">
+    <header style="margin-bottom:18px"><h1>Create Account</h1><span>Join StockWise</span></header>
+
+    {% for message in messages %}
+        <div class="message {% if message.tags == 'error' %}error{% endif %}">{{ message }}</div>
+    {% endfor %}
+
+    <div class="panel">
+        <form method="post" style="display:grid;grid-template-columns:1fr;gap:12px">
+            {% csrf_token %}
+            <label>
+                <strong>Username</strong>
+                <input type="text" name="username" maxlength="150" required autocomplete="username" placeholder="Choose a username">
+            </label>
+            <label>
+                <strong>Email</strong>
+                <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+            </label>
+            <label>
+                <strong>Password</strong>
+                <input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+            </label>
+            <label>
+                <strong>Confirm Password</strong>
+                <input type="password" name="confirm_password" required minlength="8" autocomplete="new-password" placeholder="Repeat your password">
+            </label>
+            <button class="primary" type="submit">Create account</button>
+        </form>
+    </div>
+    <p style="text-align:center;color:#697386">
+        Already have an account? <a href="/admin/login/?next=/">Sign in</a>
+    </p>
+</div>
+{% endblock %}

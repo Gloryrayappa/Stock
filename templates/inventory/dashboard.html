@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockWise - Inventory</title>
+    <style>
+        :root { --navy:#172033; --blue:#2f66ff; --green:#1a9a68; --red:#dc4c64; --line:#e7ebf1; --muted:#697386; }
+        * { box-sizing:border-box; }
+        body { margin:0; font-family:Arial, sans-serif; background:#f5f7fb; color:#1e293b; }
+        .layout { display:grid; grid-template-columns:220px 1fr; min-height:100vh; }
+        aside { background:var(--navy); color:white; padding:28px 20px; }
+        .brand { font-size:22px; font-weight:700; margin-bottom:34px; }
+        .brand span { color:#76a0ff; }
+        nav a { display:block; color:#cbd5e1; text-decoration:none; padding:12px 14px; border-radius:8px; margin:6px 0; }
+        nav a.active, nav a:hover { background:#29344d; color:white; }
+        main { padding:28px 36px; }
+        header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+        h1 { margin:0; font-size:28px; }
+        .welcome-banner {
+            background:linear-gradient(135deg, #172033 0%, #26365a 100%);
+            color:white;
+            border-radius:14px;
+            padding:24px 28px;
+            margin-bottom:20px;
+        }
+        .welcome-banner h1 { color:white; font-size:30px; }
+        .welcome-banner p { color:#cbd5e1; margin:8px 0 0; }
+        .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:22px; }
+        .card { background:white; border:1px solid var(--line); border-radius:12px; padding:18px; }
+        .card strong { display:block; font-size:26px; margin-top:8px; }
+        .card span { color:var(--muted); }
+        .toolbar { display:flex; justify-content:space-between; gap:12px; margin-bottom:14px; }
+        form.search { display:flex; gap:8px; }
+        input, select { border:1px solid #d8dee8; border-radius:8px; padding:10px 12px; background:white; }
+        button { border:0; border-radius:8px; padding:10px 14px; cursor:pointer; font-weight:600; }
+        .primary { background:var(--blue); color:white; }
+        .danger { background:#fff0f2; color:var(--red); }
+        table { width:100%; border-collapse:collapse; background:white; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+        th, td { text-align:left; padding:14px; border-bottom:1px solid var(--line); }
+        th { background:#fafbfc; color:#667085; font-size:12px; text-transform:uppercase; }
+        .status { padding:5px 8px; border-radius:20px; font-size:12px; font-weight:700; }
+        .ok { background:#e8f7f0; color:var(--green); }
+        .low { background:#fff0f2; color:var(--red); }
+        .actions { display:flex; gap:6px; align-items:center; }
+        .actions input { width:78px; }
+        .message { padding:12px 14px; border-radius:8px; margin-bottom:14px; background:#e8f7f0; color:#16724d; }
+        .message.error { background:#fff0f2; color:#b72b43; }
+        .add-form { background:white; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px; }
+        .add-form form { display:flex; gap:10px; align-items:center; }
+        .add-form select { flex:1; }
+        .empty { text-align:center; color:var(--muted); padding:38px; }
+        @media (max-width:850px) { .layout { grid-template-columns:1fr; } aside { display:none; } main { padding:20px; } .cards { grid-template-columns:1fr; } .toolbar, .add-form form { flex-direction:column; align-items:stretch; } table { display:block; overflow-x:auto; } }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside>
+        <div class="brand">Stock<span>Wise</span></div>
+        <nav>
+            <a class="active" href="/">Inventory</a>
+            <a href="/categories/">Categories</a>
+            <a href="/products/">Products</a>
+            <a href="/suppliers/">Suppliers</a>
+            <a href="/billing/">Billing</a>
+            <a href="/accounts/">Accounts</a>
+            <a href="/admin/">Admin</a>
+        </nav>
+    </aside>
+    <main>
+        <div class="welcome-banner">
+            <h1>Welcome to StockWise</h1>
+            <p>Your inventory overview and stock operations dashboard.</p>
+        </div>
+        <header><h1>Inventory</h1><span>Stock operations</span></header>
+
+        {% for message in messages %}
+            <div class="message {% if message.tags == 'error' %}error{% endif %}">{{ message }}</div>
+        {% endfor %}
+
+        <div class="cards">
+            <div class="card"><span>Total stock records</span><strong>{{ stocks|length }}</strong></div>
+            <div class="card"><span>Low-stock items</span><strong>{{ low_stock_count }}</strong></div>
+            <div class="card"><span>Products available to add</span><strong>{{ available_products|length }}</strong></div>
+        </div>
+
+        <div class="add-form">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <select name="product" required>
+                    <option value="">Choose a product</option>
+                    {% for product in available_products %}
+                        <option value="{{ product.pk }}">{{ product.product_name }} - {{ product.category.category_name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="quantity" min="0" value="0" required placeholder="Quantity">
+                <input type="number" name="reorder_level" min="0" value="5" required placeholder="Reorder level">
+                <button class="primary" type="submit">Add stock</button>
+            </form>
+        </div>
+
+        <div class="toolbar">
+            <form class="search" method="get">
+                <input type="search" name="search" value="{{ search }}" placeholder="Search product, category or supplier">
+                <button class="primary" type="submit">Search</button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr><th>Product</th><th>Category</th><th>Supplier</th><th>Quantity</th><th>Reorder level</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            {% for stock in stocks %}
+                <tr>
+                    <td><strong>{{ stock.product.product_name }}</strong></td>
+                    <td>{{ stock.product.category.category_name }}</td>
+                    <td>{{ stock.product.supplier.supplier_name }}</td>
+                    <td>{{ stock.quantity }}</td>
+                    <td>{{ stock.reorder_level }}</td>
+                    <td>
+                        {% if stock.quantity <= stock.reorder_level %}
+                            <span class="status low">Low stock</span>
+                        {% else %}
+                            <span class="status ok">In stock</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="update">
+                                <input type="hidden" name="stock_id" value="{{ stock.pk }}">
+                                <input type="number" name="quantity" min="0" value="{{ stock.quantity }}" aria-label="Quantity">
+                                <input type="number" name="reorder_level" min="0" value="{{ stock.reorder_level }}" aria-label="Reorder level">
+                                <button class="primary" type="submit">Update</button>
+                            </form>
+                            <form method="post" onsubmit="return confirm('Delete this stock record?');">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="stock_id" value="{{ stock.pk }}">
+                                <button class="danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7" class="empty">No stock records found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>
+</html>

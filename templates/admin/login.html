@@ -1,0 +1,178 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Sign in" %} | StockWise{% endblock %}
+{% block bodyclass %}{{ block.super }} login sw-login{% endblock %}
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block content_title %}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/login.css' %}">
+<style>
+  body.login {
+    background:
+      radial-gradient(circle at 10% 20%, rgba(47, 102, 255, 0.12), transparent 30%),
+      linear-gradient(135deg, #eef3ff 0%, #f7f9fd 55%, #edf1f8 100%);
+  }
+  body.login #container {
+    min-height: 100vh;
+  }
+  body.login #header {
+    background: transparent;
+    border: 0;
+    justify-content: center;
+    padding: 28px 16px 0;
+  }
+  body.login #branding h1,
+  body.login #branding h1 a:link,
+  body.login #branding h1 a:visited {
+    color: #172033;
+    font-size: 30px;
+  }
+  body.login #branding h1 a { text-decoration: none; }
+  body.login #branding h1 span { color: #2f66ff; }
+  body.login #main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: transparent;
+  }
+  body.login #content {
+    width: 430px;
+    max-width: calc(100% - 32px);
+    margin: 24px auto 60px;
+    padding: 0;
+  }
+  body.login #content-main {
+    background: #ffffff;
+    border: 1px solid #dde4ef;
+    border-radius: 16px;
+    box-shadow: 0 18px 50px rgba(23, 32, 51, 0.12);
+    padding: 34px;
+  }
+  body.login #content-main::before {
+    content: "Welcome back";
+    display: block;
+    color: #172033;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  body.login #content-main::after {
+    content: "Sign in to manage your StockWise account";
+    display: block;
+    color: #697386;
+    font-size: 14px;
+    margin-bottom: 26px;
+  }
+  body.login .form-row {
+    display: block;
+    border: 0;
+    padding: 0;
+    margin: 0 0 18px;
+  }
+  body.login .form-row label {
+    display: block;
+    color: #172033;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  body.login input[type="text"],
+  body.login input[type="password"],
+  body.login input[type="email"] {
+    width: 100%;
+    height: 46px;
+    background: #ffffff;
+    border: 1px solid #cfd7e5;
+    border-radius: 8px;
+    color: #172033;
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+  body.login input[type="text"]:focus,
+  body.login input[type="password"]:focus,
+  body.login input[type="email"]:focus {
+    border-color: #2f66ff;
+    outline: 3px solid rgba(47, 102, 255, 0.12);
+  }
+  body.login .submit-row {
+    background: transparent;
+    border: 0;
+    padding: 4px 0 0;
+  }
+  body.login .submit-row input {
+    width: 100%;
+    height: 46px;
+    background: #2f66ff;
+    border: 0;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  body.login .submit-row input:hover {
+    background: #1f54df;
+  }
+  body.login .sw-signup-link {
+    color: #697386;
+    text-align: center;
+    margin-top: 18px;
+  }
+  body.login .sw-signup-link a {
+    color: #2f66ff;
+    font-weight: 700;
+  }
+  body.login .errornote {
+    background: #fff0f2;
+    border: 1px solid #f2bdc6;
+    border-radius: 8px;
+    color: #b72b43;
+  }
+  body.login ul.errorlist {
+    color: #b72b43;
+  }
+  @media (max-width: 600px) {
+    body.login #content-main { padding: 24px 20px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">{% translate "Please correct the errors below." %}</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">{{ error }}</p>
+{% endfor %}
+{% endif %}
+
+<div id="content-main">
+  <form action="{{ app_path }}" method="post" id="login-form">
+    {% csrf_token %}
+    <div class="form-row">
+      {{ form.username.errors }}
+      {{ form.username.label_tag }}
+      {{ form.username }}
+    </div>
+    <div class="form-row">
+      {{ form.password.errors }}
+      {{ form.password.label_tag }}
+      {{ form.password }}
+      <input type="hidden" name="next" value="{{ next }}">
+    </div>
+    <div class="submit-row">
+      <input type="submit" value="{% translate 'Sign in' %}">
+    </div>
+    <div class="sw-signup-link">
+      New to StockWise? <a href="{% url 'signup' %}">Create an account</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

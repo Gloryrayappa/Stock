@@ -1,0 +1,140 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | StockWise Administration{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  :root {
+    --sw-navy: #172033;
+    --sw-blue: #2f66ff;
+    --sw-line: #e7ebf1;
+    --sw-muted: #697386;
+  }
+  body {
+    background: #f5f7fb;
+    font-family: Arial, sans-serif;
+  }
+  #header {
+    height: auto;
+    min-height: 68px;
+    background: var(--sw-navy);
+    color: #fff;
+    border: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+  }
+  #branding h1, #branding h1 a:link, #branding h1 a:visited {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  #branding h1 span { color: #76a0ff; }
+  #user-tools { color: #cbd5e1; }
+  #user-tools a:link, #user-tools a:visited { color: #fff; }
+  #logout-form button { color: #fff; }
+  .main { background: #f5f7fb; }
+  #nav-sidebar {
+    background: var(--sw-navy);
+    border: 0;
+  }
+  #nav-sidebar .module h2 {
+    background: #29344d;
+    color: #fff;
+  }
+  #nav-sidebar .module caption, #nav-sidebar .module th {
+    color: #cbd5e1;
+  }
+  #nav-sidebar .module a {
+    color: #e2e8f0;
+  }
+  #nav-sidebar .module a:hover {
+    background: #29344d;
+  }
+  #nav-sidebar .current-app a {
+    background: #29344d;
+    color: #fff;
+  }
+  .breadcrumbs {
+    background: #fff;
+    border-bottom: 1px solid var(--sw-line);
+    color: var(--sw-muted);
+  }
+  .breadcrumbs a { color: var(--sw-blue); }
+  #content {
+    background: transparent;
+  }
+  .content { width: 100%; }
+  .module, .dashboard #content-main .module, #changelist, #changelist-filter {
+    border: 1px solid var(--sw-line);
+    border-radius: 12px;
+    box-shadow: none;
+  }
+  .module caption, .module h2 {
+    background: #fff;
+    color: #1e293b;
+  }
+  .module table th, .module table td {
+    border-bottom: 1px solid var(--sw-line);
+  }
+  #changelist-filter h2 {
+    background: var(--sw-navy);
+  }
+  #changelist-filter h3 { color: #1e293b; }
+  .button, input[type=submit], input[type=button], .submit-row input,
+  a.button {
+    background: var(--sw-blue);
+    border: 0;
+    border-radius: 8px;
+  }
+  .button.default, .submit-row input.default {
+    background: var(--sw-blue);
+  }
+  .deletelink, a.deletelink:link, a.deletelink:visited {
+    background: #fff0f2;
+    color: #d94a61;
+  }
+  .object-tools a {
+    background: var(--sw-blue);
+    border-radius: 8px;
+  }
+  #changelist .paginator, .paginator {
+    border: 0;
+  }
+  .messagelist li {
+    border-radius: 8px;
+  }
+  @media (max-width: 1024px) {
+    #header { padding: 0 16px; }
+  }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Stock<span>Wise</span> Admin</a></h1>
+{% endblock %}
+
+{% block nav-global %}
+<div class="sw-admin-nav">
+  <a href="/">Inventory</a>
+  <a href="/categories/">Categories</a>
+  <a href="/products/">Products</a>
+  <a href="/suppliers/">Suppliers</a>
+</div>
+<style>
+  .sw-admin-nav {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+  .sw-admin-nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 9px 12px;
+  }
+  .sw-admin-nav a:hover { background: #29344d; color: #fff; }
+  @media (max-width: 1024px) { .sw-admin-nav { display: none; } }
+</style>
+{% endblock %}
