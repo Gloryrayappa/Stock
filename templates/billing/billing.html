@@ -1,21 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Billing | StockWise{% endblock %}
+{% block breadcrumb %}Billing{% endblock %}
 {% block content %}
-<header><h1>Billing</h1><span>Inventory value snapshot</span></header>
-<table>
-    <thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Stock value</th><th>Status</th></tr></thead>
-    <tbody>
-    {% for row in billing_rows %}
-        <tr>
-            <td><strong>{{ row.product.product_name }}</strong></td>
-            <td>{{ row.price }}</td>
-            <td>{{ row.quantity }}</td>
-            <td>{{ row.stock_value|floatformat:2 }}</td>
-            <td>{% if row.low_stock %}<span class="status low">Low stock</span>{% else %}<span class="status ok">In stock</span>{% endif %}</td>
-        </tr>
-    {% empty %}
-        <tr><td colspan="5" class="empty">No inventory records available for billing.</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
+<section class="page-heading">
+    <div class="eyebrow">Inventory value</div>
+    <h1>Billing</h1>
+    <p>A current snapshot of the value and stock status of your inventory.</p>
+</section>
+<div class="table-panel">
+    <div class="table-scroll">
+        <table>
+            <thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Stock value</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for row in billing_rows %}
+                <tr>
+                    <td><strong>{{ row.product.product_name }}</strong></td>
+                    <td>{{ row.price|floatformat:2 }}</td>
+                    <td>{{ row.quantity }}</td>
+                    <td><strong>{{ row.stock_value|floatformat:2 }}</strong></td>
+                    <td>{% if row.low_stock %}<span class="status low">Low stock</span>{% else %}<span class="status ok">In stock</span>{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5" class="empty">No inventory records available for billing.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

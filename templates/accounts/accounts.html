@@ -1,20 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Accounts | StockWise{% endblock %}
+{% block breadcrumb %}Accounts{% endblock %}
 {% block content %}
-<header><h1>Accounts</h1><span>User and session information</span></header>
+<section class="page-heading">
+    <div class="eyebrow">Workspace settings</div>
+    <h1>Accounts</h1>
+    <p>Review your current session and account access.</p>
+</section>
 <div class="cards">
-    <div class="card"><span>Session</span><strong>{% if request.user.is_authenticated %}Signed in{% else %}Guest{% endif %}</strong></div>
-    <div class="card"><span>User</span><strong>{{ request.user.username|default:"Guest" }}</strong></div>
-    <div class="card"><span>Admin access</span><strong>{% if request.user.is_staff %}Enabled{% else %}Disabled{% endif %}</strong></div>
+    <article class="card"><span>Session</span><strong>{% if request.user.is_authenticated %}Signed in{% else %}Guest{% endif %}</strong></article>
+    <article class="card"><span>User</span><strong>{{ request.user.username|default:"Guest" }}</strong></article>
+    <article class="card"><span>Admin access</span><strong>{% if request.user.is_staff %}Enabled{% else %}Disabled{% endif %}</strong></article>
 </div>
 <div class="panel">
     {% if request.user.is_authenticated %}
         <p>Signed in as <strong>{{ request.user.username }}</strong>.</p>
-        <a href="/admin/"><button class="primary" type="button">Open administration</button></a>
+        <a class="button primary" href="/admin/">Open administration</a>
     {% else %}
         <p>Sign in through Django administration to manage system users.</p>
-        <a href="/admin/login/?next=/accounts/"><button class="primary" type="button">Sign in</button></a>
-        <a href="/signup/"><button type="button">Create account</button></a>
+        <div class="account-actions">
+            <a class="button primary" href="/admin/login/?next=/accounts/">Sign in</a>
+            <a class="button secondary" href="/signup/">Create account</a>
+        </div>
     {% endif %}
 </div>
 {% endblock %}
