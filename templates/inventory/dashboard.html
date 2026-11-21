@@ -26,6 +26,11 @@
         }
         .welcome-banner h1 { color:white; font-size:30px; }
         .welcome-banner p { color:#cbd5e1; margin:8px 0 0; }
+        .module-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:22px; }
+        .module-card { background:white; border:1px solid var(--line); border-radius:12px; padding:18px; }
+        .module-card h2 { margin:0 0 6px; font-size:17px; }
+        .module-card p { min-height:36px; color:var(--muted); font-size:14px; margin:0 0 14px; }
+        .module-card a { display:inline-block; background:#edf3ff; color:var(--blue); border-radius:8px; padding:8px 12px; text-decoration:none; font-weight:700; }
         .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:22px; }
         .card { background:white; border:1px solid var(--line); border-radius:12px; padding:18px; }
         .card strong { display:block; font-size:26px; margin-top:8px; }
@@ -50,7 +55,7 @@
         .add-form form { display:flex; gap:10px; align-items:center; }
         .add-form select { flex:1; }
         .empty { text-align:center; color:var(--muted); padding:38px; }
-        @media (max-width:850px) { .layout { grid-template-columns:1fr; } aside { display:none; } main { padding:20px; } .cards { grid-template-columns:1fr; } .toolbar, .add-form form { flex-direction:column; align-items:stretch; } table { display:block; overflow-x:auto; } }
+        @media (max-width:850px) { .layout { grid-template-columns:1fr; } aside { display:none; } main { padding:20px; } .module-grid, .cards { grid-template-columns:1fr; } .toolbar, .add-form form { flex-direction:column; align-items:stretch; } table { display:block; overflow-x:auto; } }
     </style>
 </head>
 <body>
@@ -71,6 +76,38 @@
         <div class="welcome-banner">
             <h1>Welcome to StockWise</h1>
             <p>Your inventory overview and stock operations dashboard.</p>
+        </div>
+        <div class="module-grid">
+            <div class="module-card">
+                <h2>Categories</h2>
+                <p>Create and manage product categories.</p>
+                <a href="/categories/">Open categories</a>
+            </div>
+            <div class="module-card">
+                <h2>Products</h2>
+                <p>Add and maintain your product catalog.</p>
+                <a href="/products/">Open products</a>
+            </div>
+            <div class="module-card">
+                <h2>Suppliers</h2>
+                <p>Manage supplier contact details.</p>
+                <a href="/suppliers/">Open suppliers</a>
+            </div>
+            <div class="module-card">
+                <h2>Billing</h2>
+                <p>View inventory values and stock status.</p>
+                <a href="/billing/">Open billing</a>
+            </div>
+            <div class="module-card">
+                <h2>Accounts</h2>
+                <p>View account status or create a user.</p>
+                <a href="/accounts/">Open accounts</a>
+            </div>
+            <div class="module-card">
+                <h2>Administration</h2>
+                <p>Open Django administration and settings.</p>
+                <a href="/admin/">Open admin</a>
+            </div>
         </div>
         <header><h1>Inventory</h1><span>Stock operations</span></header>
 
